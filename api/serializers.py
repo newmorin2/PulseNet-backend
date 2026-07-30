@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
+from .models import Appointment, Department, Doctor, ProblemReport
+
 
 class RegisterSerializer(serializers.ModelSerializer):
 
@@ -26,3 +28,77 @@ class RegisterSerializer(serializers.ModelSerializer):
         )
 
         return user
+
+
+class DepartmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Department
+        fields = [
+            "id",
+            "name",
+            "description",
+        ]
+
+
+class DoctorSerializer(serializers.ModelSerializer):
+    department = DepartmentSerializer(read_only=True)
+
+    class Meta:
+        model = Doctor
+        fields = [
+            "id",
+            "department",
+            "name",
+            "specialization",
+            "experience",
+        ]
+
+
+class AppointmentSerializer(serializers.ModelSerializer):
+    department_name = serializers.CharField(source="department.name", read_only=True)
+
+    class Meta:
+        model = Appointment
+        fields = [
+            "id",
+            "full_name",
+            "email",
+            "phone",
+            "department",
+            "department_name",
+            "doctor",
+            "date",
+            "time",
+            "reason",
+            "additional_notes",
+            "status",
+            "created_at",
+        ]
+        read_only_fields = [
+            "id",
+            "status",
+            "created_at",
+        ]
+
+    def validate(self, attrs):
+        if not attrs.get("reason") and attrs.get("additional_notes"):
+            attrs["reason"] = attrs["additional_notes"]
+        return attrs
+
+
+class ProblemReportSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProblemReport
+        fields = [
+            "id",
+            "name",
+            "email",
+            "symptoms",
+            "status",
+            "created_at",
+        ]
+        read_only_fields = [
+            "id",
+            "status",
+            "created_at",
+        ]
