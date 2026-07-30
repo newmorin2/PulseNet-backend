@@ -1,7 +1,4 @@
 from django.db import models
-
-# Create your models here.
-from django.db import models
 from django.contrib.auth.models import User
 
 
@@ -29,7 +26,6 @@ class Doctor(models.Model):
 
 
 class Appointment(models.Model):
-
     STATUS = (
         ("Pending","Pending"),
         ("Approved","Approved"),
@@ -37,22 +33,53 @@ class Appointment(models.Model):
     )
     patient = models.ForeignKey(
         User,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
     )
     doctor = models.ForeignKey(
         Doctor,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
     )
-
-    date = models.DateField()
-    time = models.TimeField()
-    reason = models.TextField()
+    department = models.ForeignKey(
+        Department,
+        on_delete=models.SET_NULL,
+        related_name="appointments",
+        null=True,
+        blank=True
+    )
+    full_name = models.CharField(max_length=120)
+    email = models.EmailField()
+    phone = models.CharField(max_length=30)
+    date = models.DateField(null=True, blank=True)
+    time = models.TimeField(null=True, blank=True)
+    reason = models.TextField(blank=True)
+    additional_notes = models.TextField(blank=True)
     status = models.CharField(
         max_length=20,
         choices=STATUS,
         default="Pending"
     )
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
+        appointment_date = self.date.isoformat() if self.date else "unscheduled"
+        return f"{self.full_name} - {appointment_date}"
 
-        return f"{self.patient.username} - {self.doctor.name}"
+
+class ProblemReport(models.Model):
+    STATUS = (
+        ("New", "New"),
+        ("Reviewed", "Reviewed"),
+        ("Closed", "Closed"),
+    )
+    name = models.CharField(max_length=120)
+    email = models.EmailField()
+    symptoms = models.TextField()
+    status = models.CharField(max_length=20, choices=STATUS, default="New")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} - {self.status}"
