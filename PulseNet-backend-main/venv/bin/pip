@@ -1,4 +1,4 @@
-#!/home/n3wton/Documents/PulseNet-app/backend/venv/bin/python3
+#!/home/kiplimo/Pulsenet-Backend-main/PulseNet-backend-main/venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
