@@ -3,11 +3,12 @@ from django.shortcuts import render
 # Create your views here.
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import generics
+from rest_framework import generics, status
 
 from django.contrib.auth.models import User
 
-from .serializers import RegisterSerializer
+from .serializers import RegisterSerializer, DepartmentSerializer
+from .models import Department
 
 
 class RegisterView(generics.CreateAPIView):
@@ -24,3 +25,14 @@ def current_user(request):
         "email":request.user.email
 
     })
+
+class DepartmentListCreateView(generics.ListCreateAPIView):
+
+    queryset = Department.objects.all()
+    serializer_class = DepartmentSerializer
+
+
+class DepartmentDetailView(generics.RetrieveUpdateDestroyAPIView):
+
+    queryset = Department.objects.all()
+    serializer_class = DepartmentSerializer
