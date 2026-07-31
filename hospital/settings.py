@@ -23,9 +23,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-sv5!l=yutb(7n7!q79d8&*+2jkns=&=%@=$djbdya@!qpzu3zl'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "pulsenet-backend-trh1.onrender.com",
+    "localhost",
+    "127.0.0.1",
+]
 
 
 # Application definition
