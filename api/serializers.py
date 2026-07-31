@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
+from .models import Department
 
 from .models import Appointment, Department, Doctor, ProblemReport
 
@@ -102,3 +103,8 @@ class ProblemReportSerializer(serializers.ModelSerializer):
             "status",
             "created_at",
         ]
+class DepartmentSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Department
+        fields = "__all__"

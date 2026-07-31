@@ -1,6 +1,6 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import generics
+from rest_framework import generics, status
 
 from django.contrib.auth.models import User
 
@@ -12,6 +12,8 @@ from .serializers import (
     ProblemReportSerializer,
     RegisterSerializer,
 )
+from .serializers import RegisterSerializer, DepartmentSerializer
+from .models import Department
 
 
 class RegisterView(generics.CreateAPIView):
@@ -61,3 +63,13 @@ class AppointmentListCreateView(generics.ListCreateAPIView):
 class ProblemReportListCreateView(generics.ListCreateAPIView):
     queryset = ProblemReport.objects.all().order_by("-created_at")
     serializer_class = ProblemReportSerializer
+class DepartmentListCreateView(generics.ListCreateAPIView):
+
+    queryset = Department.objects.all()
+    serializer_class = DepartmentSerializer
+
+
+class DepartmentDetailView(generics.RetrieveUpdateDestroyAPIView):
+
+    queryset = Department.objects.all()
+    serializer_class = DepartmentSerializer
